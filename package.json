@@ -1,0 +1,12 @@
+{
+  "name": "save-coccinellidae",
+  "version": "1.0.0",
+  "description": "Save the Ladybug (გადაარჩინე ჭიამაია) - Browser Game with Cellar Spider, Audio Synthesis, and Epilogue",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["game", "canvas", "web-audio", "ladybug", "cellar-spider"],
+  "author": "Antigravity",
+  "license": "MIT"
+}

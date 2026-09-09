@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ka" class="app-loading">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <style>
+        /* Prevent the hard-coded fallback language/colors from flashing before saved settings load. */
+        html.app-loading body {
+            visibility: hidden;
+        }
+    </style>
+    <title>Save the Ladybug: Fight for Freedom — გადაარჩინე ჭიამაია</title>
+    <meta name="description" content="გადაარჩინე ჭიამაია ობობის ქსელისგან და დაეხმარე თავისუფლებისკენ გაფრენაში!">
+
+    <!-- Link preview metadata -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Save the Ladybug: Fight for Freedom — გადაარჩინე ჭიამაია">
+    <meta property="og:description" content="გადაარჩინე ჭიამაია ობობის ქსელისგან და დაეხმარე თავისუფლებისკენ გაფრენაში!">
+    <meta property="og:image" content="cover-photo.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="გადაარჩინე ჭიამაია — Save the Ladybug cover">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Save the Ladybug: Fight for Freedom — გადაარჩინე ჭიამაია">
+    <meta name="twitter:description" content="გადაარჩინე ჭიამაია ობობის ქსელისგან და დაეხმარე თავისუფლებისკენ გაფრენაში!">
+    <meta name="twitter:image" content="cover-photo.jpg">
+    <meta name="twitter:image:alt" content="გადაარჩინე ჭიამაია — Save the Ladybug cover">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23e63946'/><circle cx='50' cy='50' r='18' fill='%23111'/><circle cx='30' cy='35' r='8' fill='%23111'/><circle cx='70' cy='35' r='8' fill='%23111'/><circle cx='30' cy='65' r='7' fill='%23111'/><circle cx='70' cy='65' r='7' fill='%23111'/></svg>">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Canvas Wrapper -->
+        <div id="canvas-wrapper">
+            <canvas id="gameCanvas" role="img" tabindex="0" aria-label="თამაშის სათამაშო არე"></canvas>
+
+            <!-- In-Game HUD -->
+            <div id="hud-overlay">
+                <div class="hud-group">
+                    <div class="hud-badge">
+                        <span id="hud-level-text" aria-live="polite">ტური 1 / 5</span>
+                    </div>
+                    <div class="hud-badge safe">
+                        <span id="hud-barrier-count" aria-live="polite">ბარიერები: 5</span>
+                    </div>
+                    <div id="hud-threat-badge" class="hud-badge danger" title="საფრთხის დონე">
+                        <span id="txt-spider-threat">ობობის საფრთხე:</span>
+                        <div class="threat-bar-container">
+                            <div id="hud-threat-fill" class="threat-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hud-group">
+                    <button id="btn-settings-hud" class="icon-btn" title="პარამეტრები" aria-label="პარამეტრების გახსნა">⚙️</button>
+                    <button id="btn-restart" class="icon-btn" title="ტურის განახლება" aria-label="ტურის თავიდან დაწყება">🔄</button>
+                    <button id="btn-home" class="icon-btn" title="მთავარი მენიუ" aria-label="მთავარ მენიუში დაბრუნება">🏠</button>
+                </div>
+            </div>
+
+            <!-- In-Game Helper Banner -->
+            <div id="help-banner" class="hidden" aria-live="polite">
+                <span id="help-banner-text"></span>
+                <button id="btn-help-dismiss" class="help-dismiss" type="button" aria-label="დახურვა" title="დახურვა">×</button>
+            </div>
+        </div>
+
+        <!-- Main Menu Overlay -->
+        <div id="main-menu-overlay" class="modal-overlay">
+            <div class="modal-card">
+                <!-- Cute SVG Ladybug Logo -->
+                <svg id="logo-ladybug-svg" class="game-logo" viewBox="0 0 100 100">
+                    <!-- Head -->
+                    <circle cx="50" cy="22" r="14" fill="#18181b"/>
+                    <circle cx="44" cy="18" r="3" fill="#ffffff"/>
+                    <circle cx="56" cy="18" r="3" fill="#ffffff"/>
+                    <!-- Antennae -->
+                    <path d="M 44 14 Q 35 4 30 6" stroke="#18181b" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 56 14 Q 65 4 70 6" stroke="#18181b" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <!-- Colored Body -->
+                    <circle id="logo-ladybug-body" cx="50" cy="56" r="36" fill="#e63946"/>
+                    <!-- Wing Line -->
+                    <line x1="50" y1="26" x2="50" y2="92" stroke="#18181b" stroke-width="3"/>
+                    <!-- Dots -->
+                    <circle cx="34" cy="45" r="5" fill="#18181b"/>
+                    <circle cx="66" cy="45" r="5" fill="#18181b"/>
+                    <circle cx="28" cy="62" r="6" fill="#18181b"/>
+                    <circle cx="72" cy="62" r="6" fill="#18181b"/>
+                    <circle cx="38" cy="78" r="5" fill="#18181b"/>
+                    <circle cx="62" cy="78" r="5" fill="#18181b"/>
+                    <!-- Cute Face Eyes -->
+                    <circle cx="45" cy="22" r="2.5" fill="#0f172a"/>
+                    <circle cx="55" cy="22" r="2.5" fill="#0f172a"/>
+                </svg>
+
+                <h1 id="txt-game-title" class="game-title">გადაარჩინე ჭიამაია</h1>
+                <p id="txt-game-subtitle" class="subtitle">შეუშალე ხელი ჭიამაიას ობობას ქსელთან მიახლოებაში და დაეხმარე თავისუფლებისკენ გაფრენაში!</p>
+
+                <div class="btn-stack">
+                    <button id="btn-start-game" class="menu-btn primary">
+                        <span>▶</span> <span id="txt-start-game">დაიწყე თამაში</span>
+                    </button>
+                    <button id="btn-select-level" class="menu-btn">
+                        <span>🎯</span> <span id="txt-select-level">ტურის არჩევა</span>
+                    </button>
+                    <button id="btn-menu-epilogue" class="menu-btn gold">
+                        <span>📜</span> <span id="txt-menu-epilogue">ნახე ეპილოგი</span>
+                    </button>
+                    <button id="btn-settings" class="menu-btn">
+                        <span>⚙️</span> <span id="txt-settings">პარამეტრები</span>
+                    </button>
+                    <button id="btn-how-to-play" class="menu-btn">
+                        <span>❓</span> <span id="txt-how-to-play">როგორ ვითამაშოთ</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level Select Modal -->
+        <div id="level-select-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <h2 id="txt-level-select-title" style="margin-bottom: 8px; color: #f4a261;">აირჩიე ტური</h2>
+                <p id="txt-level-select-sub" class="subtitle" style="margin-bottom: 15px;">გაიარე ტურები თანმიმდევრობით</p>
+                <div id="level-grid" class="level-grid"></div>
+                <button id="btn-level-close" class="menu-btn" style="margin-top: 15px; width: 100%;">
+                    <span id="txt-level-close">დახურვა</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="txt-settings-title">
+            <div class="modal-card" style="max-width: 520px;">
+                <h2 id="txt-settings-title" style="color: #f4a261; margin-bottom: 18px; font-size: 26px;">⚙️ პარამეტრები</h2>
+
+                <!-- 1. Ladybug Color Picker -->
+                <div class="settings-group">
+                    <label id="txt-ladybug-color-label" class="settings-label">🐞 ჭიამაიას ფერი</label>
+                    <div id="ladybug-color-picker" class="color-picker-row"></div>
+                </div>
+
+                <!-- 2. Spider Color Picker -->
+                <div class="settings-group">
+                    <label id="txt-spider-color-label" class="settings-label">🕷️ ობობის ფერი</label>
+                    <div id="spider-color-picker" class="color-picker-row"></div>
+                </div>
+
+                <!-- 3. Audio Controls -->
+                <div class="settings-group">
+                    <label id="txt-music-setting-label" class="settings-label">🎵 მუსიკა</label>
+                    <button id="btn-music-setting" class="audio-setting-btn" type="button" aria-pressed="false">
+                        <span id="music-setting-icon">🔊</span>
+                        <span id="txt-music-setting-state">ჩართულია</span>
+                    </button>
+                </div>
+
+                <div class="settings-group">
+                    <label id="txt-sound-setting-label" class="settings-label">🔊 ხმა</label>
+                    <button id="btn-sound-setting" class="audio-setting-btn" type="button" aria-pressed="false">
+                        <span id="sound-setting-icon">🔊</span>
+                        <span id="txt-sound-setting-state">ჩართულია</span>
+                    </button>
+                </div>
+
+                <!-- 4. Language Selector -->
+                <div class="settings-group">
+                    <label id="txt-language-label" class="settings-label">🌐 თამაშის ენა / Game Language</label>
+                    <div class="lang-picker-row">
+                        <button id="lang-btn-en" class="lang-btn" data-lang="en">🇬🇧 English</button>
+                        <button id="lang-btn-ka" class="lang-btn active" data-lang="ka">🇬🇪 ქართული</button>
+                    </div>
+                </div>
+
+                <button id="btn-settings-close" class="menu-btn primary" style="width: 100%; margin-top: 22px;">
+                    <span id="txt-settings-save">შენახვა და დახურვა</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- How to Play / Rules Modal -->
+        <div id="rules-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="txt-rules-title">
+            <div class="modal-card" style="max-width: 520px;">
+                <h2 id="txt-rules-title" style="color: #2a9d8f; margin-bottom: 6px;">თამაშის წესები</h2>
+                <ul id="rules-list-container" class="rules-list">
+                    <!-- Dynamic rules content based on language -->
+                </ul>
+                <button id="btn-rules-close" class="menu-btn primary" style="width: 100%;">
+                    <span id="txt-rules-close">გასაგებია, დავიწყოთ!</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Level Win Modal -->
+        <div id="win-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="txt-win-title">
+            <div class="modal-card">
+                <div class="result-icon">✨ 🐞 ✨</div>
+                <h2 id="txt-win-title" class="win-title">ტური წარმატებით გაიარე!</h2>
+                <p id="win-msg" class="result-msg">ჭიამაია ბედნიერია, გაშალა ფრთები და გაფრინდა!</p>
+                <button id="btn-next-level" class="menu-btn green" style="width: 100%;">
+                    შემდეგ დონეზე გადასვლა ➔
+                </button>
+                <button id="btn-win-menu" class="menu-btn secondary" style="width: 100%;">
+                    🏠 მთავარ მენიუში დაბრუნება
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Over Modal -->
+        <div id="lose-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="txt-lose-title">
+            <div class="modal-card">
+                <div class="result-icon">🕸️ 🕷️ 😢</div>
+                <h2 id="txt-lose-title" class="lose-title">ობობამ დაიჭირა...</h2>
+                <p id="lose-msg" class="result-msg">ჭიამაია ქსელში მოხვდა. შეუშალე ხელი ბარიერებით!</p>
+                <button id="btn-try-again" class="menu-btn primary" style="width: 100%;">
+                    🔄 თავიდან ცდა
+                </button>
+                <button id="btn-gameover-menu" class="menu-btn secondary" style="width: 100%;">
+                    🏠 მთავარ მენიუში დაბრუნება
+                </button>
+            </div>
+        </div>
+
+        <!-- Epilogue Modal (Cinematic Movie Crawl) -->
+        <div id="epilogue-overlay" class="hidden">
+            <!-- Top & bottom cinematic gradient masks -->
+            <div class="epilogue-fade-top"></div>
+            <div class="epilogue-fade-bottom"></div>
+
+            <!-- Crawl Track Container -->
+            <div class="epilogue-crawl-viewport">
+                <div id="epilogue-crawl" class="epilogue-crawl">
+                    <div class="epilogue-icon">🕊️ 🌿 🐞</div>
+                    <h1 id="txt-epilogue-header" class="epilogue-header">ეპილოგი</h1>
+                    <h2 id="txt-epilogue-sub" class="epilogue-sub">ფილოსოფიური ეტიუდი</h2>
+                    <div class="epilogue-divider"></div>
+
+                    <div id="epilogue-texts" class="epilogue-text-container">
+                        <!-- Injected dynamically via game.js -->
+                    </div>
+
+                    <div id="txt-epilogue-highlight" class="epilogue-highlight">
+                        „სანამ ცოცხალი ხარ, შენს ზურგზე ყოველთვის გაქვს ფრთები, რომლებსაც თავისუფლებისკენ აფრენა შეუძლიათ.“
+                    </div>
+
+                    <div class="epilogue-ending">
+                        <div id="txt-ending-title" class="ending-title">დასასრული</div>
+                        <div id="txt-ending-sub" class="ending-sub">გმადლობთ, რომ გადაარჩინეთ ჭიამაია</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Control (Skip) -->
+            <div class="epilogue-hud">
+                <button id="btn-epilogue-skip" class="epilogue-pill-btn skip-btn">
+                    <span id="txt-epilogue-skip">გამოტოვება (მენიუ) ➔</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="audio.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
