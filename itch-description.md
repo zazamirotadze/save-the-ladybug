@@ -2,7 +2,7 @@
 
 🐞 A short, cozy browser puzzle game about guiding a tiny ladybug away from a cellar spider and toward the sunny window.
 
-Place protective leaf barriers, tap the ladybug to turn it around, and survive ten increasingly dangerous levels. Can you save it from the cellar spider and reach freedom?
+Place protective leaf barriers, tap the ladybug to turn it around, and survive five increasingly dangerous levels. Can you save it from the cellar spider and reach freedom?
 
 ## Features
 
