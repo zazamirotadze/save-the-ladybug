@@ -7,6 +7,6 @@
     "start": "node server.js"
   },
   "keywords": ["game", "canvas", "web-audio", "ladybug", "cellar-spider"],
-  "author": "Antigravity",
+  "author": "Zaza Mirotadze",
   "license": "MIT"
 }
