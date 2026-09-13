@@ -1,6 +1,6 @@
 # 🐞 გადაარჩინე ჭიამაია (Save the Ladybug)
 
-ლაივის ლინკი: https://zazamirotadze.itch.io/save-the-ladybug
+ლაივის ლინკი (live link) : https://zazamirotadze.itch.io/save-the-ladybug
 
 HTML5 Canvas-ზე შექმნილი ბრაუზერული puzzle-თამაში, რომელშიც პატარა ჭიამაია სარდაფის ობობის ქსელს უნდა აარიდო და უსაფრთხო მზიან ფანჯარამდე მიიყვანო.
 
